@@ -1,6 +1,8 @@
 #!/bin/bash
 
-addr=$(nmap -sn 192.168.1.0/24 -oG - | sed "/^#/d" | cut -d' ' -f 2)
+device=$(ip addr | grep ": wl" | cut -d':' -f 2 | tail -c+2)
+subnet=$(ip addr show dev $device | grep "inet " | cut -d' ' -f 6)
+addr=$(nmap -sn $subnet -oG - | sed "/^#/d" | cut -d' ' -f 2)
 
 addr_ar=()
 for address in $addr; do
